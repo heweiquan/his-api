@@ -1,4 +1,4 @@
-package com.example.hisapi;
+package com.example.his.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
