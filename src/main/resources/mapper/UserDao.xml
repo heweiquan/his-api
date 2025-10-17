@@ -11,4 +11,13 @@
         WHERE u.id = #{userId}
           AND u.`status` = 1
     </select>
+
+    <select id="login" parameterType="Map" resultType="Integer">
+        SELECT id
+        FROM tb_user
+        WHERE username = #{username}
+          AND password = #{password}
+            LIMIT 1;
+    </select>
+
 </mapper>
