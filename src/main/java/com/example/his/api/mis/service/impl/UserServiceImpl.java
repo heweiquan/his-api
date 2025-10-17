@@ -3,11 +3,14 @@ package com.example.his.api.mis.service.impl;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
+import com.example.his.api.common.PageUtils;
 import com.example.his.api.db.dao.UserDao;
 import com.example.his.api.mis.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -48,5 +51,18 @@ public class UserServiceImpl implements UserService {
 
         int rows = userDao.updatePassword(param);
         return rows;
+    }
+
+    @Override
+    public PageUtils searchByPage(Map param) {
+        ArrayList<HashMap> list = new ArrayList<>();
+        long count = userDao.searchCount(param);
+        if (count > 0) {
+            list = userDao.searchByPage(param);
+        }
+        int page = MapUtil.getInt(param, "page");
+        int length = MapUtil.getInt(param, "length");
+        PageUtils pageUtils = new PageUtils(list, count, page, length);
+        return pageUtils;
     }
 }

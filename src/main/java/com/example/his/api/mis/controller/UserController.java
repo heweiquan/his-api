@@ -1,10 +1,14 @@
 package com.example.his.api.mis.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaMode;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
+import com.example.his.api.common.PageUtils;
 import com.example.his.api.common.R;
 import com.example.his.api.mis.controller.form.LoginForm;
+import com.example.his.api.mis.controller.form.SearchUserByPageForm;
 import com.example.his.api.mis.controller.form.UpdatePasswordForm;
 import com.example.his.api.mis.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -69,6 +73,18 @@ public class UserController {
         }};
         int rows = userService.updatePassword(param);
         return R.ok().put("rows", rows);
+    }
+
+    @PostMapping("/searchByPage")
+    @SaCheckPermission(value = {"ROOT", "USER:SELECT"}, mode = SaMode.OR)
+    public R searchByPage(@Valid @RequestBody SearchUserByPageForm form) {
+        int page = form.getPage();
+        int length = form.getLength();
+        int start = (page - 1) * length;
+        Map param = BeanUtil.beanToMap(form);
+        param.put("start", start);
+        PageUtils pageUtils = userService.searchByPage(param);
+        return R.ok().put("page", pageUtils);
     }
 }
 
