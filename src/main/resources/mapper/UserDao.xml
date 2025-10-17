@@ -20,4 +20,17 @@
             LIMIT 1;
     </select>
 
+    <select id="searchUsernameById" parameterType="int" resultType="String">
+        SELECT username
+        FROM tb_user
+        WHERE id = #{userId}
+    </select>
+
+    <update id="updatePassword" parameterType="Map">
+        UPDATE tb_user
+        SET password = #{newPassword}
+        WHERE id = #{userId}
+          AND password = #{password}
+    </update>
+
 </mapper>

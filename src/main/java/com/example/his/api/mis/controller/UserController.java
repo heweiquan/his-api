@@ -5,11 +5,13 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.bean.BeanUtil;
 import com.example.his.api.common.R;
 import com.example.his.api.mis.controller.form.LoginForm;
+import com.example.his.api.mis.controller.form.UpdatePasswordForm;
 import com.example.his.api.mis.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -54,6 +56,19 @@ public class UserController {
         //销毁令牌
         StpUtil.logout(userId, "Web");
         return R.ok();
+    }
+
+    @PostMapping("/updatePassword")
+    @SaCheckLogin
+    public R updatePassword(@Valid @RequestBody UpdatePasswordForm form) {
+        int userId = StpUtil.getLoginIdAsInt();
+        HashMap param = new HashMap() {{
+            put("userId", userId);
+            put("password", form.getPassword());
+            put("newPassword", form.getNewPassword());
+        }};
+        int rows = userService.updatePassword(param);
+        return R.ok().put("rows", rows);
     }
 }
 

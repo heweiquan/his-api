@@ -7,6 +7,10 @@ public interface UserDao {
     public Set<String> searchUserPermissions(int userId);
 
     public Integer login(Map param);
+
+    public String searchUsernameById(int userId);
+
+    public int updatePassword(Map param);
 }
 
 
